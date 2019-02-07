@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.system.mapper.UserLoginMapper">
+    <select id="getUser" parameterType="java.lang.String" resultType="UserLogin">
+        SELECT * FROM userLogin WHERE username=#{username}
+    </select>
+    <select id="getCount" resultType="Integer">
+        SELECT COUNT(*) FROM userlogin
+    </select>
+    <select id="getUsersByPaging" resultType="com.system.pojo.UserLogin" parameterType="com.system.pojo.Page">
+        SELECT * FROM userlogin
+        limit #{toPageNo}, #{pageSize}
+    </select>
+    <select id="getUserByID" parameterType="Integer" resultType="com.system.pojo.UserLogin">
+        SELECT * FROM userlogin WHERE userid=#{uid}
+    </select>
+    <insert id="createUser" parameterType="com.system.pojo.UserLogin">
+        INSERT INTO userlogin(organization_id,username,password,role_ids,locked) VALUES (#{organization_id},#{username},#{password},#{role_ids},#{locked})
+    </insert>
+    <delete id="deleteUser" parameterType="java.lang.String">
+        DELETE FROM userlogin WHERE username=#{username}
+    </delete>
+    <update id="updateUser" parameterType="com.system.pojo.UserLogin">
+        UPDATE userlogin SET organization_id=#{organization_id},username=#{username},password=#{password},role_ids=#{role_ids},locked=#{locked} WHERE username=#{username}
+    </update>
+    <select id="findByOrganizationId" parameterType="java.lang.Integer" resultType="com.system.pojo.UserLogin">
+        SELECT * FROM userlogin WHERE organization_id=#{oid}
+    </select>
+</mapper>

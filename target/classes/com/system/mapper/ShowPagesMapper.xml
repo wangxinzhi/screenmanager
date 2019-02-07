@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.system.mapper.ShowPagesMapper">
+    <select id="getAll" resultType="com.system.pojo.Category">
+        SELECT * FROM category_
+        <if test="currentPageNo!=null and pageSize!=null">
+            limit #{currentPageNo},#{pageSize}
+        </if>
+    </select>
+    <select id="Count" resultType="Integer">
+        SELECT COUNT(*) FROM category_
+    </select>
+</mapper>

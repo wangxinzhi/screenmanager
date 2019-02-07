@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ScreenManager:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="ScreenManager.war">
+      <element id="artifact" artifact-name="ScreenManager:war exploded" />
+    </root>
+  </artifact>
+</component>

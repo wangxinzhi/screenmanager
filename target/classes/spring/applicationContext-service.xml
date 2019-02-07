@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--组件扫描，如果想要类被扫描，扫描到，并且被spring容器中注册
+        必须要在类名上添加上注解 @Repository,@Service,@Controller,@Component (这四个注解功能相同，名字不同知识区分不同功能)
+        @Component 是同用组件-->
+    <context:component-scan base-package="com.system.service.impl"/>
+
+    <!--JMS连接工厂-->
+    <!--bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory"
+          p:brokerURL="tcp://localhost:61616"/-->
+    <!--amq:connectionFactory id="connectionFactory"
+                           brokerURL="tcp://localhost:61616"/-->
+
+    <!--消息的目的地 1.队列 或 2.主题-->
+    <!--amq:queue id="verifyQueue" physicalName="program.verify.queue"/>
+    <amq:topic id="verifyTopic" physicalName="program.verify.topic"/>
+
+    <bean id="jmsTemplate"  class="org.springframework.jms.core.JmsTemplate"
+          p:connectionFactory-ref="connectionFactory"
+          p:defaultDestination-ref="verifyQueue"
+    /-->
+</beans>

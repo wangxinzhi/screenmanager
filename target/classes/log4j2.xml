@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30" >
+    <Properties>
+        <Property name="filePath">D:/logs/project.log</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <RollingFile name="fileAppenderInfo" fileName="D:/logs/info.log" filePattern="D:/logs/$${date:yyyy-MM}/info-%d{MM-dd}.log">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] [%-5level] - %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+        </RollingFile>
+
+        <RollingFile name="fileAppenderWarn" fileName="D:/logs/warn.log" filePattern="D:/logs/$${date:yyyy-MM}/warn-%d{MM-dd}.log">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] [%-5level] - %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+        </RollingFile>
+
+        <RollingFile name="fileAppenderError" fileName="D:/logs/error.log" filePattern="D:/logs/$${date:yyyy-MM}/error-%d{MM-dd}.log">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] [%-5level] - %l - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org.springframework" level="INFO"/>
+        <Root level="ALL">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="fileAppenderInfo"/>
+            <AppenderRef ref="fileAppenderWarn"/>
+            <AppenderRef ref="fileAppenderError"/>
+        </Root>
+    </Loggers>
+</Configuration>

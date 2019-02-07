@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.system.mapper.OrganizationMapper">
+    <select id="findOne" parameterType="java.lang.Integer" resultType="com.system.pojo.Organization">
+        SELECT * FROM organization WHERE id=#{id}
+    </select>
+    <select id="findAll" resultType="com.system.pojo.Organization">
+        SELECT * FROM organization
+    </select>
+    <insert id="create" parameterType="com.system.pojo.Organization">
+        INSERT INTO organization(id,name,parent_id,parent_ids,available) VALUES (#{id},#{name},#{parent_id},#{parent_ids},#{available})
+    </insert>
+    <delete id="delete" parameterType="java.lang.Integer">
+        DELETE FROM organization WHERE id=#{id}
+    </delete>
+    <update id="update" parameterType="com.system.pojo.Organization">
+        UPDATE organization SET id=#{id},name=#{name},parent_id=#{parent_id},parent_ids=#{parent_ids},available=#{available} WHERE id=#{id}
+    </update>
+</mapper>
