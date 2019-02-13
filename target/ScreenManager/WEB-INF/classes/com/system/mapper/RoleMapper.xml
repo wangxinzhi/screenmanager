@@ -18,4 +18,7 @@
     <update id="update" parameterType="com.system.pojo.Role">
         UPDATE role SET id=#{id},role=#{role},description=#{description},resource_ids=#{resource_ids},available=#{available} WHERE id=#{id}
     </update>
+    <select id="findPriorityByRole" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT level FROM role_priority WHERE role_id=#{roleId}
+    </select>
 </mapper>

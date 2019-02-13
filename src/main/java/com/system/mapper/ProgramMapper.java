@@ -7,6 +7,9 @@ import com.system.pojo.ProgramByCheck;
 import java.util.List;
 
 public interface ProgramMapper {
+    /**
+     * 对表 programlist 操作
+     */
     //保存完整节目
     void save(Program program);
     //更新完整节目
@@ -25,10 +28,16 @@ public interface ProgramMapper {
     List<Program> findBySender(String username);
     //更新节目
     void updateByCheck(ProgramByCheck programByCheck);
+    //审核不通过 对节目数据进行修改
+    void updateOfFailedChecking(Program program);
+
+    /**
+     * 对表 programbycheck 操作
+     */
+    //插入新的节目
+    void insertProgramBC(Integer pid);
     //更新反馈表 对programbycheck表进行操作
     void updateFeedback(ProgramByCheck programByCheck);
     //获取反馈信息 通过节目id从programbycheck表获取
     String getFeedback(Integer id);
-    //审核不通过 对节目数据进行修改
-    void updateOfFailedChecking(Program program);
 }

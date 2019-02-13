@@ -4,6 +4,7 @@ import com.sun.star.util.DateTime;
 import com.system.Utils.Log4jUtil;
 import com.system.Utils.OpenOfficeUtil;
 import com.system.mapper.ProgramMapper;
+import com.system.mapper.RoleMapper;
 import com.system.pojo.*;
 import com.system.service.ProgramService;
 import org.apache.commons.lang.RandomStringUtils;
@@ -15,20 +16,30 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ProgramServiceImpl implements ProgramService{
 
     @Autowired
     ProgramMapper programMapper;
+    @Autowired
+    RoleMapper roleMapper;
+    @Autowired
+    MyPriorityQueue myPriorityQueue;
 
+    /**
+     * 保存节目信息
+     * 1.每当用户要发布一个节目，系统保存节目信息要完成三个任务
+     *  1.1 保存节目信息到 programlist 表  1.2 保存节目id到 programbycheck 表  1.3 加入优先级队列
+     * @param program
+     * @throws Exception
+     */
     @Override
     public void saveProgram(Program program)throws Exception{
-        programMapper.save(program);
+        programMapper.save(program);//1.1
+        programMapper.insertProgramBC(program.getID());//1.2
+        joinMyPriorityQueue(program);//1.3
     }
 
     @Override
@@ -86,7 +97,7 @@ public class ProgramServiceImpl implements ProgramService{
     public List<Program> findProgramByUsersNotPassing(List<UserLogin> userLogins) throws Exception {
         List<Program> result=new ArrayList<>();
         for (Program p:findProgramByUsers(userLogins)) {
-            if (p.getPJudge()==0||p.getPJudge()==2){
+            if (p.getPJudge() == 0 || p.getPJudge() == 2){
                 result.add(p);
             }
         }
@@ -229,5 +240,23 @@ public class ProgramServiceImpl implements ProgramService{
         program.setPEndTime(endTime);
         programMapper.updateOfFailedChecking(program);
     }
+
+    @Override
+    public List<ProgramCustom> programsConvertToProgramCustom(List<Program> programs) throws Exception {
+        List<ProgramCustom> programCustoms = new ArrayList<>();
+        for (int i = 0; i < programs.size(); ++i){
+            ProgramCustom tmp = new ProgramCustom(programs.get(i));
+            programCustoms.add(tmp);
+        }
+        return programCustoms;
+    }
+
+    @Override
+    public void joinMyPriorityQueue(Program program) throws Exception {
+        int level = roleMapper.findPriorityByRole(program.getID());
+        ProgramItem programItem = new ProgramItem(level, program);
+        myPriorityQueue.add(programItem);
+    }
+
 
 }

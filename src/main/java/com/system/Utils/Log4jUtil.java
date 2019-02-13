@@ -27,6 +27,12 @@ public class Log4jUtil {
         logger.info("Lander's IP is [ {} ]",IP);
     }
 
+    /**
+     * 获取登陆用户的真实IP地址
+     * @param httpServletRequest
+     * @return
+     * @throws UnknownHostException
+     */
     public static String getIP(HttpServletRequest httpServletRequest) throws UnknownHostException {
         String IP=httpServletRequest.getHeader("x-forwarded-for");
         if (IP==null||IP.length()==0||"unknown".equalsIgnoreCase(IP)){
@@ -57,6 +63,6 @@ public class Log4jUtil {
      * @param dateStr 发生时间
      */
     public void writeIntoText(String msg, String dateStr){
-
+        logger.error("There were some errors which errors' date's = [ {} ] and msg's = [ {} ]",dateStr,msg);
     }
 }

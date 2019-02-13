@@ -17,8 +17,8 @@ public class Program {
     private String PUrl;//节目的URL
     private Integer PSendPersonId;//节目发布人id
     private String PSendPerson;//节目的发布人用户名
-    private Integer PType;//节目类型（0--图片类型节目；1--视频类型节目：2--文字类型节目）
-    private Integer PJudge=0;//判断节目是否发布过（0--节目未审核；1--节目审核通过：2--审核未通过：3--成功发布）
+    private Integer PType = 0;//节目类型（0--图片类型节目；1--视频类型节目：2--文字类型节目）
+    private Integer PJudge = 0;//判断节目是否发布过（0--节目未审核；1--节目审核通过：2--审核未通过：3--成功发布）
 
     public Integer getID() {
         return ID;
@@ -110,7 +110,7 @@ public class Program {
 
     @Override
     public String toString() {
-        return "ID="+ID+"  PName="+PName+"  PContent="+PContent+"  ScreensList="+ScreensList+"  PBeginTime="+PBeginTime+"  PEndTime="+PEndTime+"  PUrl="+PUrl+"  PType="+PType;
+        return "ID=" + ID + "  PName=" + PName + "  PContent=" + PContent + "  ScreensList=" + ScreensList + "  PBeginTime=" + PBeginTime + "  PEndTime=" + PEndTime + "  PUrl=" + PUrl + "  PType=" + PType;
     }
 
     public String formatBeginTime(){

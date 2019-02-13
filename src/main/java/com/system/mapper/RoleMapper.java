@@ -15,4 +15,6 @@ public interface RoleMapper {
     void delete(Integer id);
     //更新角色
     void update(Role role);
+    //获取优先级
+    int findPriorityByRole(Integer roleId);
 }

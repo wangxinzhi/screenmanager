@@ -22,7 +22,7 @@ public class LandingLog {
         Logger logger= LoggerFactory.getLogger(LandingLog.class);
         String IP=getIP(httpServletRequest);
         String name= SecurityUtils.getSubject().getPrincipal().toString();
-        logger.info("Lander's name is [ {} ]. Lander's IP is [ {} ]",name,IP);
+        logger.info("Lander's name is {}. Lander's IP is [ {} ]",name,IP);
     }
 
     /**

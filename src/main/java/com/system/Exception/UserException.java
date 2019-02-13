@@ -1,5 +1,6 @@
 package com.system.Exception;
 
+//还没什么用 2019/2/9
 public class UserException extends RuntimeException {
 
     private Integer code;

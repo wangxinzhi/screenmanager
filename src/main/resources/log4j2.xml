@@ -14,7 +14,10 @@
             <Policies>
                 <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
             </Policies>
-            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
         </RollingFile>
 
         <RollingFile name="fileAppenderWarn" fileName="D:/logs/warn.log" filePattern="D:/logs/$${date:yyyy-MM}/warn-%d{MM-dd}.log">
@@ -22,7 +25,10 @@
             <Policies>
                 <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
             </Policies>
-            <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
         </RollingFile>
 
         <RollingFile name="fileAppenderError" fileName="D:/logs/error.log" filePattern="D:/logs/$${date:yyyy-MM}/error-%d{MM-dd}.log">
@@ -30,7 +36,7 @@
             <Policies>
                 <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
             </Policies>
-            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
         </RollingFile>
     </Appenders>
 

@@ -1,6 +1,7 @@
 package com.system.service.impl;
 
 import com.system.Utils.Log4jUtil;
+import com.system.mapper.RoleMapper;
 import com.system.pojo.Role;
 import com.system.service.RoleService;
 import org.junit.Test;
@@ -18,6 +19,8 @@ public class RoleServiceImplTest {
 
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private RoleMapper roleMapper;
 
     @Test
     public void findByid() throws Exception {
@@ -76,6 +79,20 @@ public class RoleServiceImplTest {
         for (String i: result) {
             Log4jUtil.loggerInfo(i);
         }
+    }
+
+    /**
+     * 测试根据role_id从表role_priority查询角色的优先级
+     */
+    @Test
+    public void getPriorityLevel(){
+        int level = 0;
+        level = roleMapper.findPriorityByRole(Integer.valueOf(2));
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[ Role's level = ");
+        stringBuilder.append(level);
+        stringBuilder.append(" ]");
+        Log4jUtil.loggerInfo(stringBuilder.toString());
     }
 
 }

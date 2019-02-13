@@ -3,8 +3,8 @@
         PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.system.mapper.ProgramMapper">
-    <insert id="save" parameterType="Program">
-        INSERT INTO programlist (ID,PName,PContent,ScreensList,PBeginTime,PEndTime,PUrl,PSendPersonId,PSendPerson,PType,PJudge) VALUES (#{ID},#{PName},#{PContent},#{ScreensList},#{PBeginTime},#{PEndTime},#{PUrl},#{PSendPersonId},#{PSendPerson},#{PType},#{PJudge})
+    <insert id="save" parameterType="Program" useGeneratedKeys="true" keyProperty="ID">
+        INSERT INTO programlist (PName,PContent,ScreensList,PBeginTime,PEndTime,PUrl,PSendPersonId,PSendPerson,PType,PJudge) VALUES (#{PName},#{PContent},#{ScreensList},#{PBeginTime},#{PEndTime},#{PUrl},#{PSendPersonId},#{PSendPerson},#{PType},#{PJudge})
     </insert>
     <update id="update" parameterType="Program">
         UPDATE programlist SET ID=#{ID},PName=#{PName},PContent=#{PContent},ScreensList=#{ScreensList},PBeginTime=#{PBeginTime},PEndTime=#{PEndTime},PUrl=#{PUrl},PSendPersonId=#{PSendPersonId},PSendPerson=#{PSendPerson},PType=#{PType}
@@ -32,7 +32,7 @@
         UPDATE programlist SET PJudge=#{pjudge} WHERE ID=#{pid}
     </update>
     <update id="updateFeedback" parameterType="com.system.pojo.ProgramByCheck">
-        UPDATE programbycheck SET pid=#{pid},pjudge=#{pjudge},feedback=#{feedback}
+        UPDATE programbycheck SET pjudge=#{pjudge},feedback=#{feedback} WHERE pid=#{pid}
     </update>
     <select id="getFeedback" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT feedback FROM programbycheck WHERE pid=#{id}
@@ -40,4 +40,7 @@
     <update id="updateOfFailedChecking" parameterType="com.system.pojo.Program">
         UPDATE programlist SET PName=#{PName},PContent=#{PContent},ScreensList=#{ScreensList},PBeginTime=#{PBeginTime},PEndTime=#{PEndTime} WHERE ID=#{ID}
     </update>
+    <insert id="insertProgramBC" parameterType="java.lang.Integer">
+        INSERT programbycheck (pid,pjudge) VALUES (#{pid},0)
+    </insert>
 </mapper>

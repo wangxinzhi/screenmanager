@@ -5,7 +5,7 @@ public class ProgramByCheck {
 
     private Integer pid;
     private Integer pjudge;
-    private String feedback=null;
+    private String feedback = null;
 
     public Integer getPid() {
         return pid;

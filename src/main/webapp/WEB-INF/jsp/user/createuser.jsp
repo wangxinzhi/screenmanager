@@ -52,7 +52,7 @@
                         <div class="form-group">
                             <label for="organization_id" class="col-sm-2 control-label">所属部门</label>
                             <div class="col-sm-10">
-                                <select class="form-control" id="organization_id" name="organization_id">
+                                <select class="show-tick form-control" id="organization_id" name="organization_id">
                                     <c:forEach items="${organizations}" var="o">
                                         <option value="${o.id}">${o.name}</option>
                                     </c:forEach>

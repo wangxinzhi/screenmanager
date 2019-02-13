@@ -26,29 +26,18 @@
 
     <!--视图解析器-->
     <bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-          p:order="1">
+          p:order="0">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
-
-    <!--thymeleaf视图解析器 2019/1/14-->
-    <!--bean id="thymeleafViewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver"
-          p:templateEngine-ref="templateEngine"/-->
-    <!--模板引擎-->
-    <!--bean id="templateEngine"  class="org.thymeleaf.spring4.SpringTemplateEngine"
-          p:templateResolver-ref="templateResolver"/-->
-    <!--模板解析器-->
-    <!--bean id="templateResolver" class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver"
-          p:prefix="/WEB-INF/templates/"
-          p:suffix=".html"
-          p:templateMode="HTML5"/-->
 
     <!--Spring 内置两个MultipartResolver 用于开放上传功能的支持-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
     <!--bean id="standardServletMultipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/-->
 
     <bean id="logForLanding" class="com.system.log.LandingLog" />
+    <bean id="errorLogs" class="com.system.log.ErrorLogs"/>
 
     <!--开启Shiro Spring AOP权限注解支持-->
     <aop:config proxy-target-class="true">
@@ -56,6 +45,11 @@
             <aop:pointcut id="landing" expression="execution(* com.system.controller.IndexController.index(..)) and args(httpServletRequest)"/>
             <aop:before pointcut-ref="landing" method="recordLandersIP"/>
         </aop:aspect>
+        <aop:aspect ref="errorLogs">
+            <aop:pointcut id="errorGetMsg" expression="execution(* com.system.Handle.AppWideExceptionHandler.exceptionHandle(..)) and args(exception)"/>
+            <aop:before pointcut-ref="errorGetMsg" method="getMsg"/>
+        </aop:aspect>
+
     </aop:config>
 
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">

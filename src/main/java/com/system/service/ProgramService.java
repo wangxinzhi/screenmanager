@@ -39,4 +39,8 @@ public interface ProgramService {
     List<Program> getTimeSchedule()throws Exception;
     //审核未通过 重新修改节目
     void updateProgramOfFailedChecking(HttpServletRequest request, UploadProgram program)throws Exception;
+    //List<Program.class> 转化为 List<ProgramCustom.class>
+    List<ProgramCustom> programsConvertToProgramCustom(List<Program> programs)throws Exception;
+    //节目项加入优先级队列
+    void joinMyPriorityQueue(Program program)throws Exception;
 }

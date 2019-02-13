@@ -26,4 +26,5 @@ public interface RoleService {
 
     //获取权限集合
     Set<String> findPermissions(Integer... roleIds)throws Exception;
+
 }

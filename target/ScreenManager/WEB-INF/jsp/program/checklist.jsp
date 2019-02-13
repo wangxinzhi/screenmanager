@@ -53,16 +53,16 @@
                         <tbody>
                         <c:forEach items="${checkprograms}" var="p">
                             <tr>
-                                <td>${p.ID}</td>
-                                <td>${p.PName}</td>
-                                <td>${p.PContent}</td>
-                                <td>${p.PType}</td>
-                                <td>${p.formatBeginTime()}</td>
-                                <td>${p.formatEndTime()}</td>
-                                <td>${p.PSendPerson}</td>
-                                <td>${p.PJudge}</td>
+                                <td>${p.program.ID}</td>
+                                <td>${p.program.PName}</td>
+                                <td>${p.program.PContent}</td>
+                                <td>${p.PTypeStr}</td>
+                                <td>${p.program.formatBeginTime()}</td>
+                                <td>${p.program.formatEndTime()}</td>
+                                <td>${p.program.PSendPerson}</td>
+                                <td>${p.PJudgeStr}</td>
                                 <td>
-                                    <button class="btn btn-default btn-xs btn-info" onclick="location.href='<%=path%>/program/${p.ID}/check'">审核</button>
+                                    <button class="btn btn-default btn-xs btn-info" onclick="location.href='<%=path%>/program/${p.program.ID}/check'">审核</button>
                                 </td>
                             </tr>
                         </c:forEach>
