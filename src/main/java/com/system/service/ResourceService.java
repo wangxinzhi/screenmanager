@@ -1,6 +1,7 @@
 package com.system.service;
 
 import com.system.pojo.Resource;
+import com.system.pojo.ResourceByFrontFormat;
 
 import java.util.List;
 
@@ -15,5 +16,8 @@ public interface ResourceService {
     void delete(Integer id)throws Exception;
 
     void update(Resource resource)throws Exception;
+
+    // 获取系统 权限资源树 (用于前端API)
+    List<ResourceByFrontFormat> getResourceTree()throws Exception;
 
 }

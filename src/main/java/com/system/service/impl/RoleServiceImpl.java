@@ -1,9 +1,11 @@
 package com.system.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.system.Utils.RoleUtil;
 import com.system.mapper.ResourceMapper;
 import com.system.mapper.RoleMapper;
 import com.system.pojo.Role;
+import com.system.pojo.RoleByFrontFormat;
 import com.system.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,6 +78,81 @@ public class RoleServiceImpl implements RoleService{
             permissions.add(resourceMapper.findOnePermission(i));
         }
         return permissions;
+    }
+
+    @Override
+    public String getRolesName(String roles_id) throws Exception {
+        StringBuilder stringBuilder = new StringBuilder();
+        String[] ids = roles_id.split(",");
+        if (ids != null && ids.length > 0) {
+            for (int i= 0; i < ids.length; ++i) {
+                stringBuilder.append(findByid(Integer.valueOf(ids[i])).getDescription());
+                stringBuilder.append(",");
+            }
+        }else {
+            stringBuilder.append(findByid(Integer.valueOf(roles_id)).getDescription());
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
+     * 获取系统全部的 roles (用于前端API)
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<RoleByFrontFormat> findRolesForFrontDesk() throws Exception {
+        // 系统全部的 roles
+        List<RoleByFrontFormat> roleByFrontFormatList = new ArrayList<>();
+        List<Role> roleList = roleMapper.getRoles();
+        for (int i = 0; i < roleList.size(); ++i){
+            RoleByFrontFormat roleByFrontFormat = new RoleByFrontFormat();
+            roleByFrontFormat.setId(roleList.get(i).getId());
+            roleByFrontFormat.setValue(roleList.get(i).getRole());
+            roleByFrontFormat.setLabel(roleList.get(i).getDescription());
+            roleByFrontFormat.setResourceid(roleList.get(i).getResource_ids());
+            roleByFrontFormat.setState(roleList.get(i).getAvailable());
+            roleByFrontFormatList.add(roleByFrontFormat);
+        }
+        return roleByFrontFormatList;
+    }
+
+    @Override
+    public void addRole(JSONObject roleObject) throws Exception {
+        Integer id = getMaxSysRoleID() + 1;
+        String rolename = roleObject.getString("value");
+        String resource = roleObject.getString("resource");
+        String description = roleObject.getString("label");
+        Boolean state = roleObject.getBoolean("state");
+        Role role = new Role();
+        role.setId(id);
+        role.setRole(rolename);
+        role.setResource_ids(resource);
+        role.setDescription(description);
+        role.setAvailable(state);
+        roleMapper.create(role);
+    }
+
+    @Override
+    public void editRole(JSONObject roleObject) throws Exception {
+        Integer id = roleObject.getInteger("id");
+        String rolename = roleObject.getString("value");
+        String resource = roleObject.getString("resource");
+        String description = roleObject.getString("label");
+        Boolean state = roleObject.getBoolean("state");
+        Role role = new Role();
+        role.setId(id);
+        role.setRole(rolename);
+        role.setResource_ids(resource);
+        role.setDescription(description);
+        role.setAvailable(state);
+        roleMapper.update(role);
+    }
+
+    @Override
+    public Integer getMaxSysRoleID() throws Exception {
+        int maxValue = roleMapper.findMax();
+        return maxValue;
     }
 
 

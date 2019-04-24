@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="hasReturnPram" class="org.quartz.JobDataMap">
+        <constructor-arg>
+            <map>
+                <entry key="program" value-ref="sendProgram"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="sendProgram" class="com.system.pojo.Program" scope="prototype"/>
+
+    <bean id="sendJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.system.Utils.SendJob"/>
+        <property name="durability" value="true"/>
+        <property name="jobDataMap">
+            <ref bean="hasReturnPram"/>
+        </property>
+    </bean>
+
+    <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="sendJobDetail"/>
+        <property name="cronExpression" value="0/5 * * * * ?"/>
+    </bean>
+
+    <bean id="stdScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails" ref="sendJobDetail"/>
+        <property name="triggers" ref="cronTrigger"/>
+     </bean>
+
+
+</beans>

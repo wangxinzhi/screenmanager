@@ -41,6 +41,15 @@ public class Screen {
 
     @Override
     public String toString() {
-        return "[id="+this.id+"  location="+location+"  ip="+ip+"  remarks="+remarks+"]";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[ id=");
+        stringBuilder.append(id);
+        stringBuilder.append(" location = ");
+        stringBuilder.append(location);
+        stringBuilder.append(" ip = ");
+        stringBuilder.append(ip);
+        stringBuilder.append(" remarks = ");
+        stringBuilder.append(remarks);
+        return stringBuilder.toString();
     }
 }

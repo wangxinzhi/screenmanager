@@ -6,11 +6,11 @@ import java.util.List;
  * 角色实体和数据库role表对应
  */
 public class Role {
-    private Integer id;//角色id
-    private String role;//角色名
-    private String description;//角色描述,UI界面显示使用
-    private String resource_ids;//拥有的资源
-    private Boolean available = Boolean.FALSE;//是否可用,如果不可用将不会添加给用户
+    private Integer id;// 角色id
+    private String role;// 角色名
+    private String description;// 角色描述,UI界面显示使用
+    private String resource_ids;// 拥有的资源
+    private Boolean available = Boolean.FALSE;// 是否可用,如果不可用将不会添加给用户
 
     public Integer getId() {
         return id;

@@ -18,8 +18,16 @@ public interface UserLoginMapper {
     void createUser(UserLogin users);
     //删除用户
     void deleteUser(String username);
+    //删除用户
+    void deleteUserById(Integer uid);
     //更新用户
     void updateUser(UserLogin userLogin);
-    //
+    // 修改用户
+    void verifyUserInfo(UserLogin userLogin);
+    // 依据部门，获取该部门及下属部门所有的用户
     List<UserLogin> findByOrganizationId(Integer oid);
+    // 找到用户表中最大的id
+    int findMax();
+    // 重置用户密码为123456
+    void resetUserPwd(int uid);
 }

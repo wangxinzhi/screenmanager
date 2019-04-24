@@ -1,5 +1,6 @@
 package com.system.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.system.pojo.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,4 +44,21 @@ public interface ProgramService {
     List<ProgramCustom> programsConvertToProgramCustom(List<Program> programs)throws Exception;
     //节目项加入优先级队列
     void joinMyPriorityQueue(Program program)throws Exception;
+    //查询要上传的节目是否与节目队列里的节目冲突
+    boolean judgeProgramSchedule(Program program)throws Exception;
+    //向scheduler中添加task
+    void addTaskForScheduler(Program program)throws Exception;
+    //向LED电子大屏发送节目
+    void sendProgram(Program program)throws Exception;
+
+    // 依据用户名查询该用户所处部门下所有用户的信息 users (用于前端API)
+    List<ProgramByFrontFormat> findProgramsForFrontDesk(String username)throws Exception;
+    // 添加节目
+    void addProgram(JSONObject programObject)throws Exception;
+    // 修改节目
+    void editProgram(JSONObject editObject)throws Exception;
+    // 还需要修改
+    List<ProgramByFrontFormat> getVerifyProgramsForFrontDesk(String username)throws Exception;
+    //
+    void verifyProgram(JSONObject verifyObject)throws Exception;
 }

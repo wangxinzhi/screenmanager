@@ -1,6 +1,7 @@
 package com.system.pojo;
 
 
+import javax.lang.model.util.SimpleElementVisitor6;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -113,13 +114,58 @@ public class Program {
         return "ID=" + ID + "  PName=" + PName + "  PContent=" + PContent + "  ScreensList=" + ScreensList + "  PBeginTime=" + PBeginTime + "  PEndTime=" + PEndTime + "  PUrl=" + PUrl + "  PType=" + PType;
     }
 
+    /**
+     * 开始时间格式化 "yyyy-MM-dd HH:mm:ss"
+     * @return
+     */
     public String formatBeginTime(){
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return simpleDateFormat.format(PBeginTime);
     }
 
+    /**
+     * 开始时间格式化为日期 "yyyy-MM-dd"
+     * @return
+     */
+    public String formateBeginDate(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return simpleDateFormat.format(PBeginTime);
+    }
+
+    /**
+     * 开始时间格式化为短时间 "HH:mm:ss"
+     * @return
+     */
+    public String formateShortBeginTime(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        return simpleDateFormat.format(PBeginTime);
+    }
+
+    /**
+     * 结束时间格式化为 "yyyy-MM-dd HH:mm:ss"
+     * @return
+     */
     public String formatEndTime(){
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return simpleDateFormat.format(PEndTime);
     }
+
+    /**
+     * 结束时间格式化为 "yyyy-MM-dd"
+     * @return
+     */
+    public String formateEndDate(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return simpleDateFormat.format(PEndTime);
+    }
+
+    /**
+     * 结束时间格式化为 "HH:mm:ss"
+     * @return
+     */
+    public String formateShortEndTime(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        return simpleDateFormat.format(PEndTime);
+    }
+
 }

@@ -7,20 +7,18 @@
     <!--组件扫描器-->
     <context:component-scan base-package="com.system.realm"/>
 
-    <!--基于Form表单的身份验证过滤器(authc successUrl指定登录成功后重定向的默认地址是"/")-->
-    <bean id="formAuthenticationFilter" class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
+    <!--好像没什么用了 基于Form表单的身份验证过滤器(authc successUrl指定登录成功后重定向的默认地址是"/")-->
+    <!--bean id="formAuthenticationFilter" class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
         <property name="usernameParam" value="username"/>
         <property name="passwordParam" value="password"/>
         <property name="rememberMeParam" value="rememberMe"/>
         <property name="loginUrl" value="/login"/>
         <property name="successUrl" value="/"/>
-    </bean>
+    </bean-->
 
     <!--bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">
         <property name="redirectUrl" value="/login"/>
     </bean-->
-
-    <!--bean id="sysUserFilter" class="com.system.filter.SysUserFilter"/-->
 
     <!--shiro过滤器bean id要和web.xml里的filter-name一致-->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
@@ -28,7 +26,7 @@
         <property name="loginUrl" value="login"/>
         <property name="filters">
             <util:map>
-                <entry key="authc" value-ref="formAuthenticationFilter"/>
+                <entry key="authc" value-ref="ajaxOption"/>
                 <!--entry key="logout" value-ref="logoutFilter"/-->
                 <!--entry key="sysUser" value-ref="sysUserFilter"/-->
             </util:map>
@@ -37,41 +35,44 @@
             <value>
                 /login = authc
                 /logout = logout
+                /login.do = anon
                 /js/** = anon
                 /images/** = anon
                 /css/** = anon
-                /** = user
+                /** = authc
             </value>
         </property>
     </bean>
+    <!--自定义前端跨域OPTIONS处理的filter 继承于FormAuthenticationFilter.class -->
+    <bean id="ajaxOption" class="com.system.filter.AjaxOption"/>
 
-    <!--rememberMeCookie-->
-    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
-        <constructor-arg value="rememberMe"/>
-        <property name="httpOnly" value="true"/>
-        <property name="maxAge" value="2592000"/>
+    <!--配置securityManager-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="loginRealm"/>
+        <property name="rememberMeManager" ref="rememberMeManager"/>
+        <property name="sessionManager" ref="mySessionManager"/>
     </bean>
-
     <!--RememberMe管理器-->
     <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
         <!-- rememberMe cookie加密的密钥 默认AES算法 密钥长度（128 256 512 位）-->
         <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
         <property name="cookie" ref="rememberMeCookie"/>
     </bean>
-
-    <!--配置securityManager-->
-    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-        <!--配置自定义的Realm-->
-        <!--loginRealm 使用扫描器扫描注册成功-->
-        <property name="realm" ref="loginRealm"/>
-        <property name="rememberMeManager" ref="rememberMeManager"/>
+    <!--rememberMeCookie-->
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="rememberMe"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="2592000"/>
     </bean>
+    <!--自定义会话管理器 -->
+    <bean id="mySessionManager" class="com.system.manager.MySessionManager"/>
 
-    <!-- Shiro生命周期处理器 -->
+    <!--Shiro生命周期处理器 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
-    <!--启动 Shiro 注解-->
+    <!--启动Shiro注解-->
     <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
+    
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
     </bean>

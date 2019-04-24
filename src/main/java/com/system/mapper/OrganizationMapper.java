@@ -15,4 +15,6 @@ public interface OrganizationMapper {
     void delete(Integer id);
 
     void update(Organization organization);
+
+    Integer findMax();
 }

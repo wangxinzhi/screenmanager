@@ -1,9 +1,12 @@
 package com.system.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.system.pojo.Role;
+import com.system.pojo.RoleByFrontFormat;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 public interface RoleService {
     //根据用户id查询角色
@@ -26,5 +29,20 @@ public interface RoleService {
 
     //获取权限集合
     Set<String> findPermissions(Integer... roleIds)throws Exception;
+
+    // 获取角色名
+    String getRolesName(String roles_id)throws Exception;
+
+    // 获取系统全部的 roles (用于前端API)
+    List<RoleByFrontFormat> findRolesForFrontDesk()throws Exception;
+
+    // 添加角色
+    void addRole(JSONObject roleObject)throws Exception;
+
+    //
+    void editRole(JSONObject roleObject)throws Exception;
+
+    //
+    Integer getMaxSysRoleID()throws Exception;
 
 }

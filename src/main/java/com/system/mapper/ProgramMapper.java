@@ -30,6 +30,10 @@ public interface ProgramMapper {
     void updateByCheck(ProgramByCheck programByCheck);
     //审核不通过 对节目数据进行修改
     void updateOfFailedChecking(Program program);
+    // 找到programlist 表中 max's pid
+    int findMax();
+    // 重写update 方法(数据库只update变动过的值)
+    void updateFrontProgram(Program program);
 
     /**
      * 对表 programbycheck 操作

@@ -1,19 +1,24 @@
 package com.system.service.impl;
 
 import com.system.Utils.Log4jUtil;
+import com.system.Utils.SendJob;
 import com.system.mapper.ProgramMapper;
-import com.system.pojo.MyPriorityQueue;
-import com.system.pojo.Program;
-import com.system.pojo.ProgramCustom;
-import com.system.pojo.ProgramItem;
+import com.system.pojo.*;
 import com.system.service.ProgramService;
 import com.system.service.UserLoginService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.quartz.*;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
+import org.springframework.scheduling.quartz.JobDetailFactoryBean;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.swing.*;
 
@@ -37,6 +42,13 @@ public class ProgramServiceImplTest {
     private UserLoginService userLoginService;
     @Autowired
     MyPriorityQueue myPriorityQueue;
+
+    @Autowired
+    private SchedulerFactoryBean schedulerFactoryBean;
+    @Autowired
+    private JobDetailFactoryBean jobDetailFactoryBean;
+    @Autowired
+    private CronTriggerFactoryBean cronTriggerFactoryBean;
 
     @Test
     public void saveProgram() throws Exception {
@@ -165,4 +177,35 @@ public class ProgramServiceImplTest {
         afterBuilder.append(program.toString());
         Log4jUtil.loggerInfo(afterBuilder.toString());
     }
+
+    @Test
+    public void QuartzTest()throws Exception{
+        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+        JobDetail jobDetail = jobDetailFactoryBean.getObject();
+        CronTrigger cronTrigger = cronTriggerFactoryBean.getObject();
+        Program program = new Program();
+        program.setPName("test");
+        program.setPContent("test");
+        program.setScreensList("1,2,4");
+        Log4jUtil.loggerInfo("------- Program's toString is " + program.toString());
+        JobDetail sendJobDetail = scheduler.getJobDetail(JobKey.jobKey("sendJobDetail"));
+        sendJobDetail.getJobDataMap().put("program",program);
+        Program sendProgram = (Program) sendJobDetail.getJobDataMap().get("program");
+        if (sendProgram == null){
+            Log4jUtil.loggerInfo("[ SendProgram is null. ]");
+        }
+        else {
+            Log4jUtil.loggerInfo("------- SendProgram is " + sendProgram.toString() + " ---------");
+        }
+        Thread.sleep(20000);
+    }
+
+    @Test
+    public void findProgramsForFrontDeskTest()throws Exception{
+        List<ProgramByFrontFormat> list = programService.findProgramsForFrontDesk("admin");
+        for (ProgramByFrontFormat p:list) {
+            Log4jUtil.loggerInfo(p.toString());
+        }
+    }
+
 }

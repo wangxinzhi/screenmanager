@@ -22,10 +22,22 @@
     <delete id="deleteUser" parameterType="java.lang.String">
         DELETE FROM userlogin WHERE username=#{username}
     </delete>
+    <delete id="deleteUserById" parameterType="java.lang.Integer">
+        DELETE FROM userlogin WHERE userId=#{uid}
+    </delete>
     <update id="updateUser" parameterType="com.system.pojo.UserLogin">
         UPDATE userlogin SET organization_id=#{organization_id},username=#{username},password=#{password},role_ids=#{role_ids},locked=#{locked} WHERE username=#{username}
+    </update>
+    <update id="verifyUserInfo" parameterType="com.system.pojo.UserLogin">
+        UPDATE userlogin SET organization_id=#{organization_id},username=#{username},role_ids=#{role_ids},locked=#{locked} WHERE userId=#{userId}
     </update>
     <select id="findByOrganizationId" parameterType="java.lang.Integer" resultType="com.system.pojo.UserLogin">
         SELECT * FROM userlogin WHERE organization_id=#{oid}
     </select>
+    <select id="findMax" resultType="java.lang.Integer">
+        SELECT MAX(userId) FROM userlogin
+    </select>
+    <update id="resetUserPwd" parameterType="java.lang.Integer">
+        UPDATE userlogin SET password = "123456" WHERE userId=#{uid}
+    </update>
 </mapper>

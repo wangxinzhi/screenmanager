@@ -103,6 +103,16 @@
       <artifactId>spring-aop</artifactId>
       <version>4.3.9.RELEASE</version>
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context-support</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-tx</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
     <!-- JSP相关 -->
     <dependency>
       <groupId>jstl</groupId>
@@ -206,7 +216,7 @@
       <artifactId>shiro-spring</artifactId>
       <version>1.2.3</version>
     </dependency>
-    <!--JSTL标签类-->
+    <!--jstl标签类-->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
@@ -217,6 +227,23 @@
       <artifactId>html2image</artifactId>
       <version>0.1.0</version>
     </dependency>
+    <!--quartz-->
+    <dependency>
+      <groupId>org.quartz-scheduler</groupId>
+      <artifactId>quartz</artifactId>
+      <version>2.3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.quartz-scheduler</groupId>
+      <artifactId>quartz-jobs</artifactId>
+      <version>2.3.0</version>
+    </dependency>
+      <dependency>
+          <groupId>com.alibaba</groupId>
+          <artifactId>fastjson</artifactId>
+          <version>1.2.31</version>
+      </dependency>
+
 
   </dependencies>
 

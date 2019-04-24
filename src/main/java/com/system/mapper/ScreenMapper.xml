@@ -9,6 +9,9 @@
     <select id="getScreen" parameterType="java.lang.Integer" resultType="com.system.pojo.Screen">
         SELECT * FROM screens WHERE id=#{id}
     </select>
+    <select id="getAll" resultType="com.system.pojo.Screen">
+        SELECT * FROM screens
+    </select>
     <update id="updateOnscreens" parameterType="com.system.pojo.Screen">
         UPDATE screens SET id=#{id},location=#{location},ip=#{ip},remarks=#{remarks}
     </update>

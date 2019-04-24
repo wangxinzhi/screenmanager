@@ -37,6 +37,7 @@
     <!--bean id="standardServletMultipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/-->
 
     <bean id="logForLanding" class="com.system.log.LandingLog" />
+
     <bean id="errorLogs" class="com.system.log.ErrorLogs"/>
 
     <!--开启Shiro Spring AOP权限注解支持-->

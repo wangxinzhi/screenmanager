@@ -52,6 +52,20 @@ public class Organization {
 
     @Override
     public String toString() {
-        return "{id="+id+" name="+name+" parent_id="+parent_id+" parent_ids="+parent_ids+" available="+available+"}";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[ Organization.class ] ");
+        stringBuilder.append("=== ");
+        stringBuilder.append("is = ");
+        stringBuilder.append(id);
+        stringBuilder.append(" name = ");
+        stringBuilder.append(name);
+        stringBuilder.append(" parent_id = ");
+        stringBuilder.append(parent_id);
+        stringBuilder.append(" parent_ids = ");
+        stringBuilder.append(parent_ids);
+        stringBuilder.append(" available = ");
+        stringBuilder.append(available);
+        stringBuilder.append(" ===");
+        return stringBuilder.toString();
     }
 }

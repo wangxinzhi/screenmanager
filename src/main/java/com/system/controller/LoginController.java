@@ -38,7 +38,7 @@ public class LoginController {
 
     //Shiro 实现登陆失败处理
     @RequestMapping( value = "/login")
-    public String LoginByShiro(HttpServletRequest request, Model model)throws Exception{ ;
+    public String LoginByShiro(HttpServletRequest request, Model model)throws Exception{
         String exceptionClassName = (String)request.getAttribute("shiroLoginFailure");
         String error=null;
         if (UnknownAccountException.class.getName().equals(exceptionClassName)){

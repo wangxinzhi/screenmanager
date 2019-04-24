@@ -43,4 +43,19 @@
     <insert id="insertProgramBC" parameterType="java.lang.Integer">
         INSERT programbycheck (pid,pjudge) VALUES (#{pid},0)
     </insert>
+    <select id="findMax" resultType="java.lang.Integer">
+        SELECT  MAX(ID) FROM programlist
+    </select>
+    <update id="updateFrontProgram" parameterType="com.system.pojo.Program">
+        UPDATE programlist SET  <if test="PName != null"></if> PName=#{PName},
+                                <if test="PContent != null">PContent=#{PContent},</if>
+                                <if test="ScreensList != null">ScreensList=#{ScreensList},</if>
+                                <if test="PBeginTime != null">PBeginTime=#{PBeginTime},</if>
+                                <if test="PEndTime != null">PEndTime=#{PEndTime},</if>
+                                <if test="PUrl != null">PUrl=#{PUrl},</if>
+                                <if test="PSendPersonId != null">PSendPersonId=#{PSendPersonId},</if>
+                                <if test="PSendPerson != null">PSendPerson=#{PSendPerson},</if>
+                                <if test="PType != null">PType=#{PType}</if>
+        WHERE ID=#{ID}
+    </update>
 </mapper>

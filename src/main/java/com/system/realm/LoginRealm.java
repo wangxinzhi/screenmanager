@@ -29,7 +29,7 @@ public class LoginRealm extends AuthorizingRealm {
         String username=(String)getAvailablePrincipal(principalCollection);
 
         //通过用户名从数据库获取角色/权限信息
-        SimpleAuthorizationInfo authorizationInfo=new SimpleAuthorizationInfo();
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         try {
             authorizationInfo.setRoles(userLoginService.findRoles(username));
             authorizationInfo.setStringPermissions(userLoginService.findPermissions(username));

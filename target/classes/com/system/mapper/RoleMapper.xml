@@ -9,6 +9,9 @@
     <select id="getRoles" resultType="com.system.pojo.Role">
         SELECT * FROM role
     </select>
+    <select id="getRoleId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT id FROM role WHERE role = #{rolename}
+    </select>
     <insert id="create" parameterType="com.system.pojo.Role">
         INSERT INTO role(id,role,description,resource_ids,available) VALUES (#{id},#{role},#{description},#{resource_ids},#{available})
     </insert>
@@ -20,5 +23,8 @@
     </update>
     <select id="findPriorityByRole" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT level FROM role_priority WHERE role_id=#{roleId}
+    </select>
+    <select id="findMax" resultType="java.lang.Integer">
+        SELECT MAX(id) FROM role
     </select>
 </mapper>

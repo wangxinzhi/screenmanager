@@ -3,6 +3,7 @@ package com.system.service.impl;
 import com.system.Utils.Log4jUtil;
 import com.system.mapper.RoleMapper;
 import com.system.pojo.Role;
+import com.system.pojo.RoleByFrontFormat;
 import com.system.service.RoleService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -93,6 +95,19 @@ public class RoleServiceImplTest {
         stringBuilder.append(level);
         stringBuilder.append(" ]");
         Log4jUtil.loggerInfo(stringBuilder.toString());
+    }
+
+    @Test
+    public void findRolesForFrontDeskTest()throws Exception{
+        List<RoleByFrontFormat> roleByFrontFormatList = roleService.findRolesForFrontDesk();
+        for (RoleByFrontFormat roleByFrontFormat: roleByFrontFormatList) {
+            Log4jUtil.loggerInfo(roleByFrontFormat.toString());
+        }
+    }
+
+    @Test
+    public void getMaxSysRoleIDTest()throws Exception{
+        Log4jUtil.loggerInfo(" MaxSysRoleID = " + roleService.getMaxSysRoleID());
     }
 
 }

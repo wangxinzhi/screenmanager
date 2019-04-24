@@ -3,6 +3,7 @@ package com.system.service.impl;
 import com.system.Utils.Log4jUtil;
 import com.system.mapper.ScreenMapper;
 import com.system.pojo.Screen;
+import com.system.pojo.ScreenByFrontFormat;
 import com.system.service.ScreenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,28 @@ public class ScreenServiceImpl implements ScreenService {
         for (String id:
              str.split(",")) {
             result.add(screenMapper.getScreen(Integer.parseInt(id)));
+        }
+        return result;
+    }
+
+    @Override
+    public List<Screen> getSysAllScreens() throws Exception {
+        List<Screen> screens = screenMapper.getAll();
+        return screens;
+    }
+
+    @Override
+    public List<ScreenByFrontFormat> findScreensForFrontDesk(List<Screen> list) throws Exception {
+        List<ScreenByFrontFormat> result = new ArrayList<>();
+        for (Screen s:list) {
+            if (s.getRemarks().equals("使用中")) {
+                ScreenByFrontFormat screenByFrontFormat = new ScreenByFrontFormat();
+                screenByFrontFormat.setId(s.getId());
+                screenByFrontFormat.setValue(s.getIp());
+                screenByFrontFormat.setLabel(s.getLocation());
+                screenByFrontFormat.setState(true);
+                result.add(screenByFrontFormat);
+            }
         }
         return result;
     }
