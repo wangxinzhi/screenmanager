@@ -10,8 +10,14 @@ import com.system.service.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.apache.shiro.web.session.mgt.WebSessionKey;
 import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +36,9 @@ public class RestfulController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserLoginService userLoginService;
 
     @Autowired
     private OrganizationService organizationService;
@@ -49,13 +59,13 @@ public class RestfulController {
 
     @RequestMapping(value = "/login.do")
     public String login(@RequestParam(value = "username", required = false) String username,
-                        @RequestParam(value = "password", required = false) String password){
+                        @RequestParam(value = "password", required = false) String password,
+                        @RequestParam(value = "rememberMe", required = false) Boolean rememberMe){
         RestfulResult restfulResult = new RestfulResult();
         JSONObject jsonObject = new JSONObject();
-
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username,password);// implements HostAuthenticationToken, RememberMeAuthenticationToken
-
+        token.setRememberMe(rememberMe);
         try{
             //登陆
             subject.login(token);
@@ -103,12 +113,30 @@ public class RestfulController {
     }
 
     /**
+     * 依据用户的 SESSION_ID 获取前端(重要)
+     * @param token
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/user/info")
+    public String getUserInfo(@RequestParam(value = "token") String token, HttpServletRequest request, HttpServletResponse response)throws Exception {
+        Log4jUtil.loggerInfo(" ===============================================================================");
+        Log4jUtil.loggerInfo(" ===============================================================================");
+        Log4jUtil.loggerInfo(" ===============================================================================");
+        String result = userService.getUserInfo(token, request, response);
+        return result;
+    }
+
+    /**
      * Users 获取登陆用户管理权限下的用户列表 还要完善
      * @param username (eg: admin)
      * @return
      * @throws Exception
      */
     @RequestMapping(value = "/userlist.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "user:view")
     public String getUsersByName(@RequestParam(value = "username") String username)throws Exception {
         List<UserByFrontFormat> frontFromatUsers = userService.findUsersForFrontDesk(username);
         RestfulResult restfulResult = new RestfulResult();
@@ -193,6 +221,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/roles.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "role:view")
     public String getSysRoles()throws Exception{
         List<RoleByFrontFormat> list = roleService.findRolesForFrontDesk();
         RestfulResult restfulResult = new RestfulResult();
@@ -270,6 +299,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/orgtree.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "organization:view")
     public String getSystemOrgTree()throws Exception{
         List<OrganizationByFrontFormat> list = organizationService.getOrganizationTree();
         RestfulResult restfulResult = new RestfulResult();

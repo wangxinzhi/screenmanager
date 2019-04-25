@@ -27,7 +27,7 @@ public class MySessionManager extends DefaultWebSessionManager {
 
         //获取请求头中X-Token中保存的sessionId
         String id = WebUtils.toHttp(request).getHeader(AUTHORIZATION);
-        Log4jUtil.loggerInfo("* * * * * * * * * * * * * * * MySessionManager.class; X-Token * * * * * * * * * * * * * *" + id);
+        Log4jUtil.loggerInfo("[ MySessionManager.class; X-Token = " + id);
         //Log4jUtil.loggerInfo(WebUtils.toHttp(request).getCookies().toString());
         if (!StringUtils.isEmpty(id)) {
             request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_SOURCE, REFERENCED_SESSION_ID_SOURCE);

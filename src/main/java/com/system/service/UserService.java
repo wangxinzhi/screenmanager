@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.system.pojo.UserByFrontFormat;
 import com.system.pojo.UserLogin;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface UserService {
@@ -25,6 +27,9 @@ public interface UserService {
 
     //
     void resetUserPassword(int uid)throws Exception;
+
+    //
+    String getUserInfo(String sessionId, HttpServletRequest request, HttpServletResponse response)throws Exception;
 
 
 }

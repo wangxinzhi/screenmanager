@@ -27,6 +27,7 @@
         <property name="filters">
             <util:map>
                 <entry key="authc" value-ref="ajaxOption"/>
+                <entry key="user" value-ref="ajaxOption"/>
                 <!--entry key="logout" value-ref="logoutFilter"/-->
                 <!--entry key="sysUser" value-ref="sysUserFilter"/-->
             </util:map>
@@ -39,7 +40,7 @@
                 /js/** = anon
                 /images/** = anon
                 /css/** = anon
-                /** = authc
+                /** = user
             </value>
         </property>
     </bean>

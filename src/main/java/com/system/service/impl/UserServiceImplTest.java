@@ -6,6 +6,7 @@ import com.mysql.jdbc.StringUtils;
 import com.system.Utils.Log4jUtil;
 import com.system.mapper.RoleMapper;
 import com.system.mapper.UserLoginMapper;
+import com.system.pojo.RestfulResult;
 import com.system.pojo.UserLogin;
 import com.system.service.UserService;
 import org.junit.Test;
@@ -59,6 +60,30 @@ public class UserServiceImplTest {
     @Test
     public void resetUserPasswordTest()throws Exception{
         userService.resetUserPassword(4);
+    }
+
+    @Test
+    public void getUserInfoTest()throws Exception{
+        String name = "admin";
+        String sessionId = "sgagjddsaffacraacagcddfaqrtt";
+        UserLogin userLogin = userLoginMapper.getUser(name);
+        String[] roles = userLogin.getRole_ids().split(",");
+        String resources = "";
+        for (String role_id:roles) {
+            resources += roleMapper.selectByPrimaryKey(Integer.valueOf(role_id)).getResource_ids() + ",";
+        }
+        String[] resources_id = resources.split(",");
+
+        RestfulResult restfulResult = new RestfulResult();
+        restfulResult.setCode(20000);
+        restfulResult.setToken(sessionId);
+        restfulResult.setData(resources_id);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("info","success");
+        jsonObject.put("code", 20000);
+        jsonObject.put("data", restfulResult);
+        Log4jUtil.loggerInfo(jsonObject.toJSONString());
     }
 
 

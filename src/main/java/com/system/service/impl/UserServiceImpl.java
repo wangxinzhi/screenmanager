@@ -6,14 +6,23 @@ import com.system.mapper.OrganizationMapper;
 import com.system.mapper.RoleMapper;
 import com.system.mapper.UserLoginMapper;
 import com.system.pojo.Organization;
+import com.system.pojo.RestfulResult;
 import com.system.pojo.UserByFrontFormat;
 import com.system.pojo.UserLogin;
 import com.system.service.OrganizationService;
 import com.system.service.RoleService;
 import com.system.service.UserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.apache.shiro.web.session.mgt.WebSessionKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -136,5 +145,33 @@ public class UserServiceImpl implements UserService {
     @Override
     public void resetUserPassword(int uid) throws Exception {
         userLoginMapper.resetUserPwd(uid);
+    }
+
+    @Override
+    public String getUserInfo(String sessionId, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        SessionKey key = new WebSessionKey(sessionId, request, response);
+        Session session = SecurityUtils.getSecurityManager().getSession(key);
+        Object object = session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+        SimplePrincipalCollection collection = (SimplePrincipalCollection) object;
+        String name = collection.getPrimaryPrincipal().toString(); // can get username like "admin"
+
+        UserLogin userLogin = userLoginMapper.getUser(name);
+        String[] roles = userLogin.getRole_ids().split(",");
+        String resources = "";
+        for (String role_id:roles) {
+            resources += roleMapper.selectByPrimaryKey(Integer.valueOf(role_id)).getResource_ids() + ",";
+        }
+        String[] resources_id = resources.split(",");
+
+        RestfulResult restfulResult = new RestfulResult();
+        restfulResult.setCode(20000);
+        restfulResult.setToken(name); // 用户名
+        restfulResult.setData(resources_id); // 权限ids
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("info","success");
+        jsonObject.put("code", 20000);
+        jsonObject.put("data", restfulResult);
+        return jsonObject.toJSONString();
     }
 }

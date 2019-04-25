@@ -31,7 +31,7 @@ public class AjaxOption extends FormAuthenticationFilter {
 
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         boolean allowed = super.isAccessAllowed(request, response, mappedValue);
-        Log4jUtil.loggerInfo("======================== AjaxOption.class; allowed ========================"+ allowed);
+        Log4jUtil.loggerInfo("======================== AjaxOption.class; allowed ========================" + allowed);
         if (!allowed) {
             // 判断请求是否是options请求
             String method = WebUtils.toHttp(request).getMethod();
