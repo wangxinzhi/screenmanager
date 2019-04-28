@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInterceptor;
 import com.system.Utils.Log4jUtil;
+import com.system.Utils.UploadFileUtil;
 import com.system.pojo.*;
 import com.system.service.*;
 import org.apache.shiro.SecurityUtils;
@@ -24,10 +25,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -500,5 +506,29 @@ public class RestfulController {
         jsonObject.put("data", restfulResult);
         return jsonObject.toJSONString();
     }
+
+    //********************  Upload  ********************//
+    @RequestMapping(value = "/upload.do")
+    public String upload(@RequestParam("file")MultipartFile file, HttpServletRequest request)throws Exception{
+        String full_path_name = UploadFileUtil.upload(file, request);
+
+        RestfulResult restfulResult = new RestfulResult();
+        JSONObject jsonObject =  new JSONObject();
+
+        if (full_path_name != "") {
+            System.out.println("上传成功!!!");
+            restfulResult.setCode(20000);
+            restfulResult.setData(full_path_name);
+            jsonObject.put("success", true);
+        } else {
+            System.out.println("上传失败!!!");
+            restfulResult.setCode(50000);
+            restfulResult.setData("上传失败");
+            jsonObject.put("success", false);
+        }
+        jsonObject.put("data",restfulResult);
+        return jsonObject.toJSONString();
+    }
+
 
 }
