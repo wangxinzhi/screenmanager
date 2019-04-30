@@ -4,15 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.system.pojo.OnlineUser;
 import com.system.pojo.RestfulResult;
 import com.system.service.SessionService;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
-import org.apache.shiro.session.mgt.eis.SessionDAO;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
 import java.util.List;
 
 
@@ -28,6 +25,7 @@ public class SessionController {
      * @throws Exception
      */
     @RequestMapping(value = "/sessions.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "monitor:online")
     public String getSessions()throws Exception {
         List<OnlineUser> result = sessionService.list();
         RestfulResult restfulResult = new RestfulResult();
@@ -46,8 +44,20 @@ public class SessionController {
      * @throws Exception
      */
     @RequestMapping("/forcelogout.do")
+    @RequiresPermissions(value = "monitor:offline")
     public String forceLogout(@RequestParam(value = "sessionId") String sessionId)throws Exception{
-        return "";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            sessionService.forceLogout(sessionId);
+            jsonObject.put("code", 20000);
+            jsonObject.put("data", "force logout success.");
+            return jsonObject.toJSONString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonObject.put("code", 50000);
+            jsonObject.put("data", "force logout failed.");
+            return jsonObject.toJSONString();
+        }
     }
 
 

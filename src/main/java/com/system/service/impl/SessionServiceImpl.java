@@ -1,7 +1,7 @@
 package com.system.service.impl;
 
+import com.system.Utils.AddressUtil;
 import com.system.pojo.OnlineUser;
-import com.system.pojo.UserLogin;
 import com.system.service.SessionService;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
@@ -21,7 +21,7 @@ public class SessionServiceImpl implements SessionService {
     private SessionDAO sessionDAO;
 
     @Override
-    public List<OnlineUser> list() {
+    public List<OnlineUser> list() throws Exception {
         List<OnlineUser> list = new ArrayList<>();
         Collection<Session> sessions = sessionDAO.getActiveSessions();
         System.out.println("SESSIONS SIZE = " + sessions.size());
@@ -39,7 +39,7 @@ public class SessionServiceImpl implements SessionService {
                 }
                 onlineUser.setId(session.getId().toString());
                 onlineUser.setHost(session.getHost());
-                // onlineUser.setAddress(AddressUtil.getAddress(session.getHost()));
+                onlineUser.setAddress(AddressUtil.getPhysicalAddress(session.getHost()));
                 onlineUser.setStartTime(session.getStartTimestamp());
                 onlineUser.setEndTime(session.getLastAccessTime());
                 long timeout = session.getTimeout();
@@ -58,7 +58,11 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public boolean forceLogout(String sessionId) {
-        return false;
+    public boolean forceLogout(String sessionId) throws Exception{
+        Session session = sessionDAO.readSession(sessionId);
+        session.setTimeout(0L);
+        session.stop();
+        sessionDAO.delete(session);
+        return true;
     }
 }

@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface SessionService {
 
-    List<OnlineUser> list();
+    List<OnlineUser> list()throws Exception;
 
-    boolean forceLogout(String sessionId);
+    boolean forceLogout(String sessionId)throws Exception;
 
 }

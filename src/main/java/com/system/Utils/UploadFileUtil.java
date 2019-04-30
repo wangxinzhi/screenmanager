@@ -54,7 +54,6 @@ public class UploadFileUtil {
         // 获取文件在服务器的存储位置
         String path = request.getSession().getServletContext().getRealPath("/upload");
         File filepath = new File(path);
-        Log4jUtil.loggerInfo("+++++++++++++++++++++++++++++ file path +++++++++++++++++++++++++++" + path);
         if (!filepath.exists() && !filepath.isDirectory()) {
             System.out.println("[ 目录不存在创建目录" + filepath);
             filepath.mkdir();

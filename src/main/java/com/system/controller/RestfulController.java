@@ -61,6 +61,9 @@ public class RestfulController {
     @Autowired
     private ScreenService screenService;
 
+    @Autowired
+    private SessionService sessionService;
+
     //********************  Login  ********************//
 
     @RequestMapping(value = "/login.do")
@@ -91,6 +94,28 @@ public class RestfulController {
             jsonObject.put("code",50008);
             restfulResult.setCode(50008);
             jsonObject.put("data", restfulResult);
+            return jsonObject.toJSONString();
+        }
+    }
+
+    /**
+     * Logout 登出
+     * @param token
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/logout.do")
+    public String logout(@RequestParam(value = "token") String token)throws Exception{
+        JSONObject jsonObject = new JSONObject();
+        try {
+            sessionService.forceLogout(token);
+            jsonObject.put("code", 20000);
+            jsonObject.put("data", "force logout success.");
+            return jsonObject.toJSONString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonObject.put("code", 50000);
+            jsonObject.put("data", "force logout failed.");
             return jsonObject.toJSONString();
         }
     }
@@ -162,6 +187,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/adduser.do")
+    @RequiresPermissions(value = "user:create")
     public String addUser(@RequestParam(value = "form", defaultValue = "") String form)throws Exception{
         Log4jUtil.loggerInfo("-----------" + form + "-----------");
         JSONObject userObject = JSON.parseObject(form);
@@ -179,6 +205,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/deleteuser.do")
+    @RequiresPermissions(value = "user:delete")
     public String deleteUser(@RequestParam(value = "uid") int uid)throws Exception{
         userService.deleteUserById(uid);
         JSONObject jsonObject = new JSONObject();
@@ -194,6 +221,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "edituser.do")
+    @RequiresPermissions(value = "user:update")
     public String editUser(@RequestParam(value = "editform") String editform)throws Exception{
         JSONObject userObject = JSON.parseObject(editform);
         userService.editUserInfo(userObject);
@@ -247,6 +275,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/addrole.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "role:create")
     public String addRoles(@RequestParam(value = "form") String form)throws Exception{
         Log4jUtil.loggerInfo(form);
         JSONObject  roleObject = JSON.parseObject(form);
@@ -267,6 +296,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/editrole.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "role:update")
     public String editRole(@RequestParam(value = "editform") String editform)throws Exception{
         JSONObject editObject = JSON.parseObject(editform);
         roleService.editRole(editObject);
@@ -286,6 +316,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/deleterole.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "role:delete")
     public String deleteRole(@RequestParam(value = "id") String id)throws Exception{
         roleService.delete(Integer.valueOf(id));
         RestfulResult restfulResult = new RestfulResult();
@@ -324,6 +355,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/addorg.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "organization:create")
     public String addSystemOrg(@RequestParam(value = "form") String form)throws Exception{
         JSONObject orgObject = JSON.parseObject(form);
         organizationService.addSystemOrg(orgObject);
@@ -343,6 +375,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/deleteorg.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "organization:delete")
     public String deleteSystemOrg(@RequestParam(value = "id") String id)throws Exception{
         organizationService.delete(Integer.parseInt(id));
         RestfulResult restfulResult = new RestfulResult();
@@ -402,6 +435,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/addprogram.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "program:create")
     public String addPrograms(@RequestParam(value = "form") String form)throws Exception{
         JSONObject programObject = JSON.parseObject(form);
         programService.addProgram(programObject);
@@ -415,7 +449,7 @@ public class RestfulController {
     }
 
     /**
-     *
+     * Edit Program Info 修改节目信息
      * @param editform
      * @return
      * @throws Exception
@@ -434,7 +468,7 @@ public class RestfulController {
     }
 
     /**
-     *
+     * Delete Program 删除节目
      * @param id
      * @return
      * @throws Exception
@@ -495,6 +529,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/verifyprogram.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "program:ckeck")
     public String verifyProgram(@RequestParam(value = "verifyform") String verifyform)throws Exception{
         JSONObject verifyObject = JSON.parseObject(verifyform);
         programService.verifyProgram(verifyObject);
@@ -508,7 +543,8 @@ public class RestfulController {
     }
 
     //********************  Upload  ********************//
-    @RequestMapping(value = "/upload.do")
+
+    @RequestMapping(value = "/upload.do", produces = "application/json;charset=utf-8")
     public String upload(@RequestParam("file")MultipartFile file, HttpServletRequest request)throws Exception{
         String full_path_name = UploadFileUtil.upload(file, request);
 

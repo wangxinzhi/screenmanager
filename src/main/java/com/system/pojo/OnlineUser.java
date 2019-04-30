@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.util.Date;
 
+// 在线用户 pojo
 public class OnlineUser implements Serializable {
 
     private String id; // sessionId
