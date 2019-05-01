@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 发送节目实体
  */
-public class UploadProgram extends Program{
+public class UploadProgram extends Program {
 
     private MultipartFile[] files = null;
 

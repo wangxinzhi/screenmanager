@@ -38,10 +38,10 @@ public class ExceptionHandle implements HandlerExceptionResolver{
 
     @Override
     public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
-        ModelAndView modelAndView=new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView();
         if (e instanceof UnknownAccountException){
             UserException userException = (UserException) e;
-            modelAndView.addObject("Result",ResultUtil.error(userException.getCode(),userException.getMessage()));
+            modelAndView.addObject("Result", ResultUtil.error(userException.getCode(), userException.getMessage()));
             modelAndView.setViewName("error");
             return modelAndView;
         }
@@ -51,7 +51,7 @@ public class ExceptionHandle implements HandlerExceptionResolver{
             return modelAndView;
         }
         else {
-            modelAndView.addObject("Result",ResultUtil.error(-1,"未知错误"));
+            modelAndView.addObject("Result", ResultUtil.error(-1,"未知错误"));
             modelAndView.setViewName("error");
             return modelAndView;
         }

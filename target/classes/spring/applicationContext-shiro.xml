@@ -37,6 +37,7 @@
                 /login = authc
                 /logout = logout
                 /login.do = anon
+                /upload.do = anon
                 /js/** = anon
                 /images/** = anon
                 /css/** = anon
@@ -66,7 +67,11 @@
         <property name="maxAge" value="2592000"/>
     </bean>
     <!--自定义会话管理器 -->
-    <bean id="mySessionManager" class="com.system.manager.MySessionManager"/>
+    <bean id="mySessionManager" class="com.system.manager.MySessionManager">
+        <property name="sessionDAO" ref="memorySessionDAO"/>
+    </bean>
+
+    <bean id="memorySessionDAO" class="org.apache.shiro.session.mgt.eis.MemorySessionDAO"/>
 
     <!--Shiro生命周期处理器 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>

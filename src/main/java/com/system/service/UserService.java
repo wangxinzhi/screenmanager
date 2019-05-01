@@ -31,5 +31,4 @@ public interface UserService {
     //
     String getUserInfo(String sessionId, HttpServletRequest request, HttpServletResponse response)throws Exception;
 
-
 }

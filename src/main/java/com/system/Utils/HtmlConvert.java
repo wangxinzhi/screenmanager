@@ -1,18 +1,13 @@
 package com.system.Utils;
 
-import com.sun.imageio.plugins.jpeg.JPEGImageReader;
 import gui.ava.html.image.generator.HtmlImageGenerator;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.MemoryImageSource;
 import java.awt.image.PixelGrabber;
-import java.awt.image.RenderedImage;
 import java.io.*;
-import java.net.URL;
 
 /**
  * html转image

@@ -2,8 +2,6 @@ package com.system.Utils;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class HtmlConvertTest {
 
     @Test
@@ -15,6 +13,14 @@ public class HtmlConvertTest {
         Log4jUtil.loggerInfo(htmltext);
         htmlConvert.htmlToImage(htmltext,"F:\\测试.jpg");
         htmlConvert.test();
+    }
+
+    @Test
+    public void getResource()throws Exception{
+        String path = "path";
+        String path2 = "log4j2.xml";
+        path = HtmlConvertTest.class.getClassLoader().getResource("config/ip2region.db").getPath();
+        System.out.println("PATH = " + path);
     }
 
 }

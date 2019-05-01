@@ -208,4 +208,12 @@ public class ProgramServiceImplTest {
         }
     }
 
+    @Test
+    public void getVerifyProgramsForFrontDeskTest()throws Exception{
+        List<ProgramByFrontFormat> result = programService.getVerifyProgramsForFrontDesk("admin");
+        for (ProgramByFrontFormat p:result) {
+            Log4jUtil.loggerInfo(p.toString());
+        }
+    }
+
 }

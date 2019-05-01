@@ -19,6 +19,7 @@
           <file>file://$MODULE_DIR$/src/main/resources/spring/spring-mvc.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/spring/applicationContext-shiro.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/spring/applicationContext-quartz.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/spring/application-redis.xml</file>
         </fileset>
       </configuration>
     </facet>
@@ -97,5 +98,6 @@
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP-java6:2.3.13" level="project" />
     <orderEntry type="library" name="Maven: org.quartz-scheduler:quartz-jobs:2.3.0" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.31" level="project" />
+    <orderEntry type="library" name="Maven: org.lionsoul:ip2region:1.7.2" level="project" />
   </component>
 </module>

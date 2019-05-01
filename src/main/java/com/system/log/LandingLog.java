@@ -19,9 +19,9 @@ public class LandingLog {
      * @param httpServletRequest
      */
     public void recordLandersIP(HttpServletRequest httpServletRequest) throws UnknownHostException {
-        Logger logger= LoggerFactory.getLogger(LandingLog.class);
-        String IP=getIP(httpServletRequest);
-        String name= SecurityUtils.getSubject().getPrincipal().toString();
+        Logger logger = LoggerFactory.getLogger(LandingLog.class);
+        String IP = getIP(httpServletRequest);
+        String name = SecurityUtils.getSubject().getPrincipal().toString();
         logger.info("Lander's name is {}. Lander's IP is [ {} ]",name,IP);
     }
 
@@ -32,24 +32,24 @@ public class LandingLog {
      * @throws UnknownHostException
      */
     public static String getIP(HttpServletRequest httpServletRequest) throws UnknownHostException {
-        String IP=httpServletRequest.getHeader("x-forwarded-for");
-        if (IP==null||IP.length()==0||"unknown".equalsIgnoreCase(IP)){
-            IP=httpServletRequest.getHeader("Proxy-Client-IP");
+        String IP = httpServletRequest.getHeader("x-forwarded-for");
+        if (IP == null || IP.length() == 0 || "unknown".equalsIgnoreCase(IP)){
+            IP = httpServletRequest.getHeader("Proxy-Client-IP");
         }
-        if (IP==null||IP.length()==0||"unknown".equalsIgnoreCase(IP)){
-            IP=httpServletRequest.getHeader("WL-Proxy-Client-IP");
+        if (IP == null || IP.length() == 0 || "unknown".equalsIgnoreCase(IP)){
+            IP = httpServletRequest.getHeader("WL-Proxy-Client-IP");
         }
-        if (IP==null||IP.length()==0||"unknown".equalsIgnoreCase(IP)){
-            IP=httpServletRequest.getRemoteAddr();
-            if (IP.equals("127.0.0.1")||IP.equals("0:0:0:0:0:0:0:1")){
-                InetAddress inetAddress=null;
-                inetAddress=InetAddress.getLocalHost();
-                IP=inetAddress.getHostAddress();
+        if (IP == null || IP.length() == 0 || "unknown".equalsIgnoreCase(IP)){
+            IP = httpServletRequest.getRemoteAddr();
+            if (IP.equals("127.0.0.1") || IP.equals("0:0:0:0:0:0:0:1")){
+                InetAddress inetAddress = null;
+                inetAddress = InetAddress.getLocalHost();
+                IP = inetAddress.getHostAddress();
             }
         }
-        if (IP!=null&&IP.length()>15){
-            if (IP.indexOf(",")>0){
-                IP=IP.substring(0,IP.indexOf(","));
+        if (IP != null && IP.length() > 15){
+            if (IP.indexOf(",") > 0){
+                IP = IP.substring(0,IP.indexOf(","));
             }
         }
         return IP;

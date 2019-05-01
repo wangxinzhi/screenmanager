@@ -13,6 +13,7 @@ public class ProgramByFrontFormat {
     private Date endtime;// 节目结束时间
     private String endtime_localstr;// 节目结束时间 localString
     private String purl;// 节目资源存储地址
+    private String[] files;// 资源文件的url数组,(经purl转换)
     private Integer publisherId;// 发布人id
     private String publisher;// 发布人
     private Integer ptype = 0;// 节目类型（0--图片类型节目；1--视频类型节目：2--文字类型节目）
@@ -74,6 +75,14 @@ public class ProgramByFrontFormat {
 
     public void setPurl(String purl) {
         this.purl = purl;
+    }
+
+    public String[] getFiles() {
+        return files;
+    }
+
+    public void setFiles(String[] files) {
+        this.files = files;
     }
 
     public Integer getPublisherId() {

@@ -399,7 +399,12 @@ public class ProgramServiceImpl implements ProgramService{
         List<String> screensTemp = programObject.getJSONArray("screenlist").toJavaList(String.class);
         String screens = "";
         for (String s: screensTemp) {
-            screens += s + ",";
+            screens += s + ","; // 添加 ',' 分隔符
+        }
+        List<String> filesTemp = programObject.getJSONArray("fileList").toJavaList(String.class);
+        String purl = "";
+        for (String file: filesTemp) {
+            purl += file + "&"; // 添加 '&' 分隔符
         }
         String publisher = programObject.getString("publisher");
 
@@ -408,6 +413,7 @@ public class ProgramServiceImpl implements ProgramService{
         program.setPName(pname);
         program.setPContent(pcontent);
         program.setScreensList(screens);
+        program.setPUrl(purl);
         program.setPBeginTime(startTime);
         program.setPEndTime(endTime);
         program.setPSendPerson(publisher);
@@ -457,6 +463,7 @@ public class ProgramServiceImpl implements ProgramService{
                 programByFrontFormat.setStarttime(p.getPBeginTime());
                 programByFrontFormat.setEndtime(p.getPEndTime());
                 programByFrontFormat.setPurl(p.getPUrl());
+                programByFrontFormat.setFiles(p.getPUrl().split("&"));
                 programByFrontFormat.setPublisherId(p.getPSendPersonId());
                 programByFrontFormat.setPublisher(p.getPSendPerson());
                 programByFrontFormat.setPtype(p.getPType());

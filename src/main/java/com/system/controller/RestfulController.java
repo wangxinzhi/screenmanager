@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInterceptor;
 import com.system.Utils.Log4jUtil;
+import com.system.Utils.UploadFileUtil;
 import com.system.pojo.*;
 import com.system.service.*;
 import org.apache.shiro.SecurityUtils;
@@ -24,10 +25,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -54,6 +60,9 @@ public class RestfulController {
 
     @Autowired
     private ScreenService screenService;
+
+    @Autowired
+    private SessionService sessionService;
 
     //********************  Login  ********************//
 
@@ -85,6 +94,28 @@ public class RestfulController {
             jsonObject.put("code",50008);
             restfulResult.setCode(50008);
             jsonObject.put("data", restfulResult);
+            return jsonObject.toJSONString();
+        }
+    }
+
+    /**
+     * Logout 登出
+     * @param token
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/logout.do")
+    public String logout(@RequestParam(value = "token") String token)throws Exception{
+        JSONObject jsonObject = new JSONObject();
+        try {
+            sessionService.forceLogout(token);
+            jsonObject.put("code", 20000);
+            jsonObject.put("data", "force logout success.");
+            return jsonObject.toJSONString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonObject.put("code", 50000);
+            jsonObject.put("data", "force logout failed.");
             return jsonObject.toJSONString();
         }
     }
@@ -156,6 +187,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/adduser.do")
+    @RequiresPermissions(value = "user:create")
     public String addUser(@RequestParam(value = "form", defaultValue = "") String form)throws Exception{
         Log4jUtil.loggerInfo("-----------" + form + "-----------");
         JSONObject userObject = JSON.parseObject(form);
@@ -173,6 +205,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/deleteuser.do")
+    @RequiresPermissions(value = "user:delete")
     public String deleteUser(@RequestParam(value = "uid") int uid)throws Exception{
         userService.deleteUserById(uid);
         JSONObject jsonObject = new JSONObject();
@@ -188,6 +221,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "edituser.do")
+    @RequiresPermissions(value = "user:update")
     public String editUser(@RequestParam(value = "editform") String editform)throws Exception{
         JSONObject userObject = JSON.parseObject(editform);
         userService.editUserInfo(userObject);
@@ -241,6 +275,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/addrole.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "role:create")
     public String addRoles(@RequestParam(value = "form") String form)throws Exception{
         Log4jUtil.loggerInfo(form);
         JSONObject  roleObject = JSON.parseObject(form);
@@ -261,6 +296,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/editrole.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "role:update")
     public String editRole(@RequestParam(value = "editform") String editform)throws Exception{
         JSONObject editObject = JSON.parseObject(editform);
         roleService.editRole(editObject);
@@ -280,6 +316,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/deleterole.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "role:delete")
     public String deleteRole(@RequestParam(value = "id") String id)throws Exception{
         roleService.delete(Integer.valueOf(id));
         RestfulResult restfulResult = new RestfulResult();
@@ -318,6 +355,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/addorg.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "organization:create")
     public String addSystemOrg(@RequestParam(value = "form") String form)throws Exception{
         JSONObject orgObject = JSON.parseObject(form);
         organizationService.addSystemOrg(orgObject);
@@ -337,6 +375,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/deleteorg.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "organization:delete")
     public String deleteSystemOrg(@RequestParam(value = "id") String id)throws Exception{
         organizationService.delete(Integer.parseInt(id));
         RestfulResult restfulResult = new RestfulResult();
@@ -396,6 +435,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/addprogram.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "program:create")
     public String addPrograms(@RequestParam(value = "form") String form)throws Exception{
         JSONObject programObject = JSON.parseObject(form);
         programService.addProgram(programObject);
@@ -409,7 +449,7 @@ public class RestfulController {
     }
 
     /**
-     *
+     * Edit Program Info 修改节目信息
      * @param editform
      * @return
      * @throws Exception
@@ -428,7 +468,7 @@ public class RestfulController {
     }
 
     /**
-     *
+     * Delete Program 删除节目
      * @param id
      * @return
      * @throws Exception
@@ -489,6 +529,7 @@ public class RestfulController {
      * @throws Exception
      */
     @RequestMapping(value = "/verifyprogram.do", produces = "application/json;charset=utf-8")
+    @RequiresPermissions(value = "program:ckeck")
     public String verifyProgram(@RequestParam(value = "verifyform") String verifyform)throws Exception{
         JSONObject verifyObject = JSON.parseObject(verifyform);
         programService.verifyProgram(verifyObject);
@@ -500,5 +541,30 @@ public class RestfulController {
         jsonObject.put("data", restfulResult);
         return jsonObject.toJSONString();
     }
+
+    //********************  Upload  ********************//
+
+    @RequestMapping(value = "/upload.do", produces = "application/json;charset=utf-8")
+    public String upload(@RequestParam("file")MultipartFile file, HttpServletRequest request)throws Exception{
+        String full_path_name = UploadFileUtil.upload(file, request);
+
+        RestfulResult restfulResult = new RestfulResult();
+        JSONObject jsonObject =  new JSONObject();
+
+        if (full_path_name != "") {
+            System.out.println("上传成功!!!");
+            restfulResult.setCode(20000);
+            restfulResult.setData(full_path_name);
+            jsonObject.put("success", true);
+        } else {
+            System.out.println("上传失败!!!");
+            restfulResult.setCode(50000);
+            restfulResult.setData("上传失败");
+            jsonObject.put("success", false);
+        }
+        jsonObject.put("data",restfulResult);
+        return jsonObject.toJSONString();
+    }
+
 
 }

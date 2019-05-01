@@ -51,6 +51,7 @@
           <element id="library" level="project" name="Maven: com.zaxxer:HikariCP-java6:2.3.13" />
           <element id="library" level="project" name="Maven: org.quartz-scheduler:quartz-jobs:2.3.0" />
           <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.31" />
+          <element id="library" level="project" name="Maven: org.lionsoul:ip2region:1.7.2" />
         </element>
       </element>
       <element id="directory" name="META-INF">
